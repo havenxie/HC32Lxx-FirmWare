@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<TKStudioOptions Version="3.00" Author="YinHandong[Òüº®¶¬]">
+    <Projects OPTPES="98,96,0,0,0,96,0,0,0,0,">
+        <Project ProjectGUID="{B21395E1-25DC-465b-9238-A1A0AD33303E}" Name="L005_ICC" ACTCFG="DebugRel">
+            <TARGOPT Name="DebugRel" OPTDF="0">
+                <OPTFFF VAL="&lt;..\src\main.c&gt; {2,3,-1,-1,0,0,1036,439,41,2135}" />
+            </TARGOPT>
+        </Project>
+    </Projects>
+</TKStudioOptions>
