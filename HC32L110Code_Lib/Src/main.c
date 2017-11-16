@@ -100,8 +100,6 @@
 #define RTC_SEL			RTC_XT32K
 #define WakeUpTime		500					//以MS为单位
 
-
-
 //N8
 //#define RCH_24M_TRIM  	( 0x16C )
 //#define RCH_16M_TRIM  	( 0x16F )
@@ -110,14 +108,6 @@
 //#define RCL_32K_TRIM  	( 0x0E3 )
 //#define RCL_38K_TRIM  	( 0x0E4 )
 //#define PMU_1V5_TRIM    ( 0x027)
-//N11
-//#define RCH_24M_TRIM  	( 0x166 )
-//#define RCH_16M_TRIM  	( 0x168 )
-//#define RCH_8M_TRIM  	( 0x167 )
-//#define RCH_4M_TRIM  	( 0x163 )
-//#define RCL_32K_TRIM  	( 0x0E6 )
-//#define RCL_38K_TRIM  	( 0x0E7 )
-//#define PMU_1V5_TRIM    ( 0x026)
 //N7
 //#define RCH_24M_TRIM  	( 0x168 )
 //#define RCH_16M_TRIM  	( 0x16b )
@@ -126,14 +116,6 @@
 //#define RCL_32K_TRIM  	( 0x0E8 )
 //#define RCL_38K_TRIM  	( 0x0E7 )
 //#define PMU_1V5_TRIM    ( 0x02B)
-////N14
-//#define RCH_24M_TRIM  	( 0x168 )
-//#define RCH_16M_TRIM  	( 0x16C )
-//#define RCH_8M_TRIM  	( 0x16A )
-//#define RCH_4M_TRIM  	( 0x166 )
-//#define RCL_32K_TRIM  	( 0x0E8 )
-//#define RCL_38K_TRIM  	( 0x0E8 )
-//#define PMU_1V5_TRIM    ( 0x031)
 //N5
 //#define RCH_24M_TRIM  	( 0x14A )
 //#define RCH_16M_TRIM  	( 0x14D )
@@ -150,14 +132,6 @@
 #define RCL_32K_TRIM  	( 0x0EE )
 #define RCL_38K_TRIM  	( 0x0EE )
 #define PMU_1V5_TRIM    ( 0x031)
-//N24
-//#define RCH_24M_TRIM  	( 0x162 )
-//#define RCH_16M_TRIM  	( 0x165 )
-//#define RCH_8M_TRIM  	( 0x162 )
-//#define RCH_4M_TRIM  	( 0x15c )
-//#define RCL_32K_TRIM  	( 0x0E3 )
-//#define RCL_38K_TRIM  	( 0x0E4 )
-//#define PMU_1V5_TRIM    ( 0x020)
 //Y98
 //#define RCH_24M_TRIM  	( 0x15B )
 //#define RCH_16M_TRIM  	( 0x163 )
@@ -166,14 +140,7 @@
 //#define RCL_32K_TRIM  	( 0x0E7 )
 //#define RCL_38K_TRIM  	( 0x0E8 )
 //#define PMU_1V5_TRIM    ( 0x02E)
-//Y48
-//#define RCH_24M_TRIM  	( 0x15C )
-//#define RCH_16M_TRIM  	( 0x163 )
-//#define RCH_8M_TRIM  	( 0x163 )
-//#define RCH_4M_TRIM  	( 0x15C )
-//#define RCL_32K_TRIM  	( 0x0E7 )
-//#define RCL_38K_TRIM  	( 0x0E8 )
-//#define PMU_1V5_TRIM    ( 0x07F)
+
 //==============================================================================
 
 uint8_t	PcOutBuf[256];
@@ -342,7 +309,10 @@ void DoIccTest_ActiveOrSleep_1( uint8_t CpuMode, uint8_t Per_switch, uint8_t nop
 	L005_SystemCtrl->SYSCTRL2 = 0X5A5A;
 	L005_SystemCtrl->SYSCTRL2 = 0XA5A5;
 	L005_SystemCtrl->SYSCTRL0_f.RCH_EN = 1;
-	//L005_FLASH->CR_f.WAIT = 1;//
+	
+    L005_FLASH->BYPASS_f.BYSEQ = 0X5A5A; 
+    L005_FLASH->BYPASS_f.BYSEQ = 0XA5A5;    
+	L005_FLASH->CR_f.WAIT = 1;//
     
 	while( L005_SystemCtrl->RCH_CR_f.stable == 0);
 	L005_SystemCtrl->SYSCTRL2 = 0X5A5A;

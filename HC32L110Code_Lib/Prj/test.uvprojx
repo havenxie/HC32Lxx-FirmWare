@@ -419,11 +419,6 @@
               <FileType>1</FileType>
               <FilePath>..\lib\src\hc32l110_uart.c</FilePath>
             </File>
-            <File>
-              <FileName>hc32l110_uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\lib\inc\hc32l110_uart.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

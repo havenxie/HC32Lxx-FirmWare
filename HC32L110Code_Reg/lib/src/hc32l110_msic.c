@@ -72,17 +72,18 @@
   *     @arg SysTick_CLKSource_HCLK: AHB clock selected as SysTick clock source.
   * @retval None
   */
-//void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
-//{
-//  /* Check the parameters */
-//  assert_param(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
-//  
-//  if (SysTick_CLKSource == SysTick_CLKSource_HCLK)
-//  {
-//    SysTick->CTRL |= SysTick_CLKSource_HCLK;
-//  }
-//  else
-//  {
-//    SysTick->CTRL &= SysTick_CLKSource_HCLK_Div8;
-//  }
-//}
+void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
+{
+  /* Check the parameters */
+  assert_param(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
+  
+  if (SysTick_CLKSource == SysTick_CLKSource_HCLK)
+  {
+    SysTick->CTRL |= SysTick_CLKSource_HCLK;
+  }
+  else
+  {
+    //SysTick->CTRL &= SysTick_CLKSource_HCLK_Div8;
+  }
+}
+

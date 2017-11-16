@@ -1,5 +1,6 @@
 #include "hc32l110_gpio.h"
 #include "hc32l110_rcc.h"
+#include "delay.h"
 
 void GPIO_DeInit(void)
 {
@@ -306,8 +307,7 @@ void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO
   {
       if((GPIO_PinSource == GPIO_PinSource0) || (GPIO_PinSource == GPIO_PinSource7))return;
   }
-  
-
+ 
   while((GPIO_PinSource & 0x0001) != 0x0001)
   {
       GPIO_PinSource>>=1;
@@ -316,14 +316,6 @@ void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO
   GPIOx->SEL[temp] = GPIO_AF;  
 }
 
-void McuDelay( uint32_t cnt )
-{
-	while( cnt )
-	{
-		cnt--;
-	}
-	 
-}
 void GPIO_Test(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -333,13 +325,21 @@ void GPIO_Test(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;	
     GPIO_Init(GPIO0, &GPIO_InitStructure);
+    
+    GPIO_InitStructure.GPIO_Pin = GPIO_PinSource4 ;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;	
+    GPIO_Init(GPIO2, &GPIO_InitStructure);
+    GPIO_PinAFConfig(GPIO2, GPIO_PinSource4, GPIO_AF_3);
+    
+    L005_GPIO->GPIO_CTRL1_f.hclk_sel = 0X03;
+	L005_GPIO->GPIO_CTRL1_f.hclk_en = 1;
+    
     while(1)
     {
         GPIO_WriteBit(GPIO0, GPIO_PinSource3, Bit_SET);
-        //GPIO_WriteBit(GPIO2, GPIO_PinSource4, Bit_SET);
-        McuDelay(40000);
+        delay_ms(100);
         GPIO_WriteBit(GPIO0, GPIO_PinSource3, Bit_RESET);
-        //GPIO_WriteBit(GPIO2, GPIO_PinSource4, Bit_RESET);
-        McuDelay(200000);
+        delay_ms(100);
     }
 }

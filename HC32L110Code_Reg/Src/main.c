@@ -6,6 +6,7 @@
 #include "stdio.h"
 #include "SlaveMcu.h"
 #include "Def_Err.h"
+#include "delay.h"
 //===================================================================================
 //TEST Option
 #define PERON                     1
@@ -110,14 +111,6 @@
 //#define RCL_32K_TRIM  	( 0x0E3 )
 //#define RCL_38K_TRIM  	( 0x0E4 )
 //#define PMU_1V5_TRIM    ( 0x027)
-//N11
-//#define RCH_24M_TRIM  	( 0x166 )
-//#define RCH_16M_TRIM  	( 0x168 )
-//#define RCH_8M_TRIM  	( 0x167 )
-//#define RCH_4M_TRIM  	( 0x163 )
-//#define RCL_32K_TRIM  	( 0x0E6 )
-//#define RCL_38K_TRIM  	( 0x0E7 )
-//#define PMU_1V5_TRIM    ( 0x026)
 //N7
 //#define RCH_24M_TRIM  	( 0x168 )
 //#define RCH_16M_TRIM  	( 0x16b )
@@ -126,14 +119,6 @@
 //#define RCL_32K_TRIM  	( 0x0E8 )
 //#define RCL_38K_TRIM  	( 0x0E7 )
 //#define PMU_1V5_TRIM    ( 0x02B)
-////N14
-//#define RCH_24M_TRIM  	( 0x168 )
-//#define RCH_16M_TRIM  	( 0x16C )
-//#define RCH_8M_TRIM  	( 0x16A )
-//#define RCH_4M_TRIM  	( 0x166 )
-//#define RCL_32K_TRIM  	( 0x0E8 )
-//#define RCL_38K_TRIM  	( 0x0E8 )
-//#define PMU_1V5_TRIM    ( 0x031)
 //N5
 //#define RCH_24M_TRIM  	( 0x14A )
 //#define RCH_16M_TRIM  	( 0x14D )
@@ -150,14 +135,6 @@
 #define RCL_32K_TRIM  	( 0x0EE )
 #define RCL_38K_TRIM  	( 0x0EE )
 #define PMU_1V5_TRIM    ( 0x031)
-//N24
-//#define RCH_24M_TRIM  	( 0x162 )
-//#define RCH_16M_TRIM  	( 0x165 )
-//#define RCH_8M_TRIM  	( 0x162 )
-//#define RCH_4M_TRIM  	( 0x15c )
-//#define RCL_32K_TRIM  	( 0x0E3 )
-//#define RCL_38K_TRIM  	( 0x0E4 )
-//#define PMU_1V5_TRIM    ( 0x020)
 //Y98
 //#define RCH_24M_TRIM  	( 0x15B )
 //#define RCH_16M_TRIM  	( 0x163 )
@@ -166,14 +143,6 @@
 //#define RCL_32K_TRIM  	( 0x0E7 )
 //#define RCL_38K_TRIM  	( 0x0E8 )
 //#define PMU_1V5_TRIM    ( 0x02E)
-//Y48
-//#define RCH_24M_TRIM  	( 0x15C )
-//#define RCH_16M_TRIM  	( 0x163 )
-//#define RCH_8M_TRIM  	( 0x163 )
-//#define RCH_4M_TRIM  	( 0x15C )
-//#define RCL_32K_TRIM  	( 0x0E7 )
-//#define RCL_38K_TRIM  	( 0x0E8 )
-//#define PMU_1V5_TRIM    ( 0x07F)
 //==============================================================================
 
 uint8_t	PcOutBuf[256];
@@ -262,9 +231,11 @@ int main(void)
 	L005_SystemCtrl->PERI_CLKEN = 0xffffffff;
 	L005_SystemCtrl->BOOT0_f.auto_switch_lpm = 1;
 	L005_PMU->PMU_f.TRIM_V1P5 = PMU_1V5_TRIM;
-	
-	P03_SetLow();
-	P03_SetOutput();
+    L005_SystemCtrl->RCH_CR_f.FSEL = RCH24M;
+	L005_SystemCtrl->RCH_CR_f.TRIM = RCH_24M_TRIM;
+    
+	delay_init();
+    
 	//TestIdx = Key_Scan();
 	
 	GPIO_SetLowpowerMode();
@@ -349,10 +320,7 @@ void DoIccTest_ActiveOrSleep_1( uint8_t CpuMode, uint8_t Per_switch, uint8_t nop
 	L005_SystemCtrl->SYSCTRL2 = 0XA5A5;
 	L005_SystemCtrl->SYSCTRL0_f.Clk_sw4_sel = 0x00;
 	
-        P24_SetOutput();
-	L005_GPIO->P24_SEL = 0X03;
-	L005_GPIO->GPIO_CTRL1_f.hclk_sel = 0X03;
-	L005_GPIO->GPIO_CTRL1_f.hclk_en = 1;
+
     
 	L005_SystemCtrl->PERI_CLKEN = PeriClkON;  	//打开指定的CLK
 	if(Per_switch == PERON)
@@ -395,6 +363,9 @@ void DoIccTest_ActiveOrSleep_2( uint8_t CpuMode )
 	L005_SystemCtrl->SYSCTRL2 = 0X5A5A;
 	L005_SystemCtrl->SYSCTRL2 = 0XA5A5;
 	L005_SystemCtrl->SYSCTRL0_f.XTH_EN = 1;
+    
+    L005_FLASH->BYPASS_f.BYSEQ = 0X5A5A; 
+    L005_FLASH->BYPASS_f.BYSEQ = 0XA5A5;    
 	L005_FLASH->CR_f.WAIT = 1;//当从低速时钟切换到外部高速时钟时需要设置flash读等待周期为1
 	
 	while( L005_SystemCtrl->XTH_CR_f.stable == 0);

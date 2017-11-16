@@ -2712,14 +2712,14 @@ typedef struct
 {
 	__IO uint32_t IF0                    : 1;
 	__IO uint32_t IF1       			 : 1;
-    __IO uint32_t RERSEVED1              : 32;
+    __IO uint32_t RERSEVED1              : 30;
 }flash_ifr_field_t;
 
 typedef struct
 {
 	__IO uint32_t ICLR0		             : 1;
 	__IO uint32_t ICLR1				     : 1;
-	__IO uint32_t RERSEVED               : 32;
+	__IO uint32_t RERSEVED               : 30;
 }flash_iclr_field_t;
 
 typedef struct 
